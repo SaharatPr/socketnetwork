@@ -13,10 +13,12 @@ async def main():
             return;
         f = open(f"./profile/{sys.argv[1]}.txt", "r")
         line = f.readlines();
-        Process(target=socketServer,args=(line[0].split('\n'), int(line[1].split(":")[1]))).start();
+        host = line[1].split(',')[2].split(':')[0];
+        port = line[1].split(',')[2].split(':')[1];
+        Process(target=socketServer,args=(sys.argv[1],host, port)).start();
         while True:
             await asyncio.sleep(1)
-            for x in range(2,len(line)):
+            for x in range(1,len(line)):
                 socketClient(line[x],sys.argv[1])
                 
     except NameError:

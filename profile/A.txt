@@ -1,4 +1,4 @@
 A_TEXT
-port:10000
-B,Localhost,10001
-D,localhost,10004
+A,192.168.1.0/24,localhost:10000
+B,-,localhost:10001
+D,192.168.4.0/24,localhost:10004

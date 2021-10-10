@@ -6,24 +6,22 @@ import sys
 import ast
 import asyncio
 from socketClient import *
-def socketServer(router,port):
+def socketServer(router,host,port):
     try:
-        serverPort = port
+        serverPort = int(port)
         serverSocket = socket(AF_INET,SOCK_STREAM)
         serverSocket.bind(('',serverPort))
         serverSocket.listen(1000)
-        print(f'Router {router[0]} started ...');
+        print(f'Router {router} started ...');
         while 1:
             connectionSocket, addr = serverSocket.accept()
             sentence = connectionSocket.recv(1024)
-            getDataFromClient(sentence, "S");
-            # capitalizedSentence = sentence.upper()
+            getDataFromClient(sentence);
             connectionSocket.send(sentence)
-        # connectionSocket.close();
     except NameError:
         print(NameError)
 
-def getDataFromClient(data, fromrouter):
+def getDataFromClient(data):
     try:
         datajson = pickle.loads(data);
         updateTable(datajson)
@@ -34,12 +32,23 @@ def getDataFromClient(data, fromrouter):
 
 def updateTable(data):
     try:
+        # print(data);
         table = sys.argv[1];
-        datatable = readTableOrCreateFile(table);
+        
+        datatable = readTable(table);
         mytable= np.array(datatable)
         neartable = np.array(data["data"]);
         row_mytable, c_mytable= mytable.shape;
+        row_neartable, c_neartable= neartable.shape;
+        subnetmyTable = mytable[0:row_mytable,0:1];
+        subnetnearTable = neartable[0:row_neartable,0:1];
+        # print(subnetmyTable);
+        # print(subnetnearTable);
         position_datarow = np.argwhere(mytable== data["datafrom"]);
+        for i in neartable:
+            print(i);
+            print("==============");
+        return;
         for i in  mytable:
             for j in  neartable:
                 if(i[0] == j[0]):
@@ -48,10 +57,9 @@ def updateTable(data):
                     position_datarow_neartable = np.argwhere(neartable== i[0]);
                     row_neartable = position_datarow_neartable[0]
                     if(mytable[row_mytable[0]][1] > neartable[row_neartable[0]][1]):
+                        print("XXXX");
                         mytable[row_mytable[0]][1] = int(neartable[row_neartable[0]][1])+1;
-        print(mytable);
         my_df =pd.DataFrame(mytable)
-        print(my_df);
         my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
                 # print(position_datarow[0][0])
     except NameError:

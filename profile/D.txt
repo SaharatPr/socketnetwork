@@ -1,4 +1,4 @@
 D_TEXT
-port:10004
-A,localhost,10000
-E,localhost,10005
+D,-,localhost:10004
+A,192.168.4.0/24,localhost:10000
+E,-,localhost:10005
