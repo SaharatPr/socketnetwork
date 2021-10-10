@@ -3,9 +3,10 @@ import sys
 from socketServer import * 
 from socketClient import *
 from time import time, sleep
+import asyncio
 import threading
 from multiprocessing import Process, Pool
-def main():
+async def main():
     try:
         if(len(sys.argv) <= 1):
             print("Please enter paramitter ex. python3 routers [filename]");
@@ -14,11 +15,12 @@ def main():
         line = f.readlines();
         Process(target=socketServer,args=(line[0].split('\n'), int(line[1].split(":")[1]))).start();
         while True:
-            sleep(1 - time() % 1);
+            await asyncio.sleep(1)
             for x in range(2,len(line)):
-                socketClient(line[x],sys.argv[1], );
+                socketClient(line[x],sys.argv[1])
+                
     except NameError:
         print(NameError)
 if __name__ == '__main__':
-    main();
+    asyncio.run(main());
 # line[x].split(",")[1],int(line[x].split(",")[2])

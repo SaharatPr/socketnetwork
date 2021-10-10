@@ -10,8 +10,8 @@ import csv
 import pandas as pd
 def socketClient(data, table):
     try:
-        HEADERSIZE = 10
-        datatable = readTableOrCreateFile(table);
+
+        datatable =  readTableOrCreateFile(table);
         jsondatatbale = {
             "datafrom" : table,
             "data": datatable
@@ -51,6 +51,7 @@ def WriteTable(datatable, columeconnect, table, cost):
     #table คือชื่อ Routers หรือชื่อตาราง
     try:
         x = np.array(datatable)
+        # print(datatable)
         r, c= x.shape;
 
         datarouter = x[0:r,0:1];

@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import sys
 import ast
+import asyncio
 from socketClient import *
 def socketServer(router,port):
     try:
@@ -32,21 +33,30 @@ def getDataFromClient(data, fromrouter):
         print(f"Error get table")
 
 def updateTable(data):
-    # print(data["data"]);
-    table = sys.argv[1];
-    datatable = readTableOrCreateFile(table);
-    mytable= np.array(datatable)
-    neartable = np.array(data["data"]);
-    row_mytable, c_mytable= mytable.shape;
-    position_datarow = np.argwhere(mytable== data["datafrom"]);
-    for i in mytable:
-        for j in neartable:
-            if(i[0] == j[0]):
-                position_datarow = np.argwhere(mytable== j[0]);
-                print( mytable[position_datarow[0]]);
-                mytable[position_datarow][1] = 1;
+    try:
+        table = sys.argv[1];
+        datatable = readTableOrCreateFile(table);
+        mytable= np.array(datatable)
+        neartable = np.array(data["data"]);
+        row_mytable, c_mytable= mytable.shape;
+        position_datarow = np.argwhere(mytable== data["datafrom"]);
+        for i in  mytable:
+            for j in  neartable:
+                if(i[0] == j[0]):
+                    position_datarow_mytable = np.argwhere(mytable== j[0]);
+                    row_mytable = position_datarow_mytable[0]
+                    position_datarow_neartable = np.argwhere(neartable== i[0]);
+                    row_neartable = position_datarow_neartable[0]
+                    if(mytable[row_mytable[0]][1] > neartable[row_neartable[0]][1]):
+                        mytable[row_mytable[0]][1] = int(neartable[row_neartable[0]][1])+1;
+        print(mytable);
+        my_df =pd.DataFrame(mytable)
+        print(my_df);
+        my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
                 # print(position_datarow[0][0])
-
+    except NameError:
+        print(NameError);
+        print(f"Error update table")
  
         # print(x[0])
     # if(len(position_datarow) == 0):
