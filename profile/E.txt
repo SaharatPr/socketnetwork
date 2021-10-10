@@ -1,0 +1,5 @@
+E_TEXT
+port:10005
+D,localhost,10004
+C,localhost,10002
+F,localhost,10006

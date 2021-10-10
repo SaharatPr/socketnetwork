@@ -1,0 +1,5 @@
+C_TEXT
+port:10002
+B,localhost,10001
+E,localhost,10005
+G,localhost,10007

@@ -1,0 +1,4 @@
+D_TEXT
+port:10004
+A,localhost,10000
+E,localhost,10005

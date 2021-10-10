@@ -1,0 +1,4 @@
+B_TEXT
+B:10001
+A,localhost,10000
+C,localhost,10002

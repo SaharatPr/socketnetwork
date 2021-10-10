@@ -1,0 +1,4 @@
+F_TEXT
+port:10006
+E,localhost,10005
+G,localhost,10007
