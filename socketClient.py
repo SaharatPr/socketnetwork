@@ -8,15 +8,16 @@ from os import path
 import numpy as np
 import csv
 import os
-def socketClient(data, table):
-    datatable =  readTableOrCreateFile(data,table);
+def socketClient(data, table,count):
+    datatable =  readTableOrCreateFile(data,table,count);
     try:    
         jsondatatbale = {
             "datafrom" : table,
-            "data": datatable
+            "data": datatable,
+            "count":count
         }
         if(data.split(",")[0] == table):
-            return
+            return count;
         databyte = pickle.dumps(jsondatatbale)
         serverName = data.split(",")[2].split(":")[0];
         serverPort = int(data.split(",")[2].split(":")[1]);
@@ -24,32 +25,36 @@ def socketClient(data, table):
         clientSocket.connect((serverName,serverPort))
         clientSocket.send(databyte)
         modifiedSentence = clientSocket.recv(1024)
+        if(modifiedSentence == None):
+            return count;
         clientSocket.close()
+        return count+1;
     except ConnectionRefusedError:
-        WriteTable(datatable,data, table, 9999);
+        WriteTable(datatable,data, table, 9999, count);
+        return count;
         # print(f'Connot Connect {data.split(",")[1]}:{data.split(",")[2]}')      
 
 
-def readTableOrCreateFile(data,table):
+def readTableOrCreateFile(data,table, count):
     try:
         if(data.split(',')[1] != "-"):
             if(path.isfile(f'./table/{table}.csv') != False):
                 with open(f'./table/{table}.csv', 'r', ) as f:
                     datalist = list(csv.reader(f))
                     if(len(datalist) == 0):
-                        datalist = [[data.split(',')[1], "-", 1]]
+                        datalist = [[data.split(',')[1], "-", 1, count]]
                         my_df = pd.DataFrame(datalist)
                         my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
-                    WriteTable(datalist, data, table, 1);
+                    WriteTable(datalist, data, table, 1,count);
 
             if(path.isfile(f'./table/{table}.csv') != True):
                 with open(f'./table/{table}.csv', 'w+', ) as f:
                     datalist = list(csv.reader(f))
                     if(len(datalist) == 0):
-                        datalist = [[data.split(',')[1], "-", 1]]
+                        datalist = [[data.split(',')[1], "-", 1, count]]
                         my_df = pd.DataFrame(datalist)
                         my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
-                    WriteTable(datalist, data, table, 1);   
+                    WriteTable(datalist, data, table, 1, count);   
         if(path.isfile(f'./table/{table}.csv') != False):  
             f = open(f"./table/{table}.csv", "r", )
             line = list(csv.reader(f))
@@ -58,7 +63,7 @@ def readTableOrCreateFile(data,table):
     except:
         print(f"Error read table ")      
 
-def WriteTable(datatable, columeconnect, table, cost):
+def WriteTable(datatable, columeconnect, table, cost, count):
     #datatable คือ table ใน router
     #columeconnect คือ colume ปัจจุบัน
     #table คือชื่อ Routers หรือชื่อตาราง
@@ -71,7 +76,7 @@ def WriteTable(datatable, columeconnect, table, cost):
         subnet = columeconnect.split(",")[1];
         position_datarow = np.argwhere(datarouter== subnet);
         if(len(position_datarow) == 0 and subnet != "-"):
-            datanumpi = np.append(x, np.array([[subnet,"-",cost]]),axis = 0);
+            datanumpi = np.append(x, np.array([[subnet,"-",cost, count]]),axis = 0);
             my_df = pd.DataFrame(datanumpi)
             my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
         

@@ -32,7 +32,9 @@ def getDataFromClient(data):
 
 def updateTable(data):
     try:
-        # print(data);
+        print(data["data"]);
+        if(len(data["data"]) == 0):
+            return;
         table = sys.argv[1];
         
         datatable = readTable(table);
@@ -42,13 +44,27 @@ def updateTable(data):
         row_neartable, c_neartable= neartable.shape;
         subnetmyTable = mytable[0:row_mytable,0:1];
         subnetnearTable = neartable[0:row_neartable,0:1];
-        # print(subnetmyTable);
-        # print(subnetnearTable);
         position_datarow = np.argwhere(mytable== data["datafrom"]);
-        for i in neartable:
-            print(i);
-            print("==============");
+        for i in subnetnearTable:
+            if(len(np.argwhere(subnetmyTable== i)) == 0 ):
+               positionnear =  np.argwhere(neartable== i);
+               subnet = neartable[positionnear[0][0]][positionnear[0][1]];
+               fromrouter = neartable[positionnear[0][0]][1];
+               if(fromrouter == '-'):
+                   fromrouter = data["datafrom"]
+               datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1, int(data["count"])+1]]),axis = 0);
+               my_df = pd.DataFrame(datanumpi)
+               my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+            print("-----------");
         return;
+        # for i in subnetmyTable:
+        #     for j in subnetnearTable:
+        #         print(data["datafrom"]);
+        #         # print(i);
+        #         # print("==============");
+        #         print(j);
+        #         print("-----------");
+        # return;
         for i in  mytable:
             for j in  neartable:
                 if(i[0] == j[0]):
