@@ -28,7 +28,7 @@ def socketClient(data, table,count):
         if(modifiedSentence == None):
             return count;
         clientSocket.close()
-        return count+1;
+        return count;
     except ConnectionRefusedError:
         WriteTable(datatable,data, table, 9999, count);
         return count;
@@ -37,6 +37,7 @@ def socketClient(data, table,count):
 
 def readTableOrCreateFile(data,table, count):
     try:
+
         if(data.split(',')[1] != "-"):
             if(path.isfile(f'./table/{table}.csv') != False):
                 with open(f'./table/{table}.csv', 'r', ) as f:
@@ -58,18 +59,55 @@ def readTableOrCreateFile(data,table, count):
         if(path.isfile(f'./table/{table}.csv') != False):  
             f = open(f"./table/{table}.csv", "r", )
             line = list(csv.reader(f))
+            npline = np.array(line);
+            max = 0;
+            for j in npline:
+                if(max <= int(j[3])):
+                    max = int(j[3]);
+
+            newline=[];
+            count = 0;
+            for j in npline:
+                if(max < int(j[3])):
+                    line.pop(count)
+                    count = count+1
             return line;
         return []
     except:
-        print(f"Error read table ")      
+        print(f"Error read table ")    
+        return [];  
 
 def WriteTable(datatable, columeconnect, table, cost, count):
     #datatable คือ table ใน router
     #columeconnect คือ colume ปัจจุบัน
     #table คือชื่อ Routers หรือชื่อตาราง
     try:
+        
         if(len(datatable) == 0):
-            return
+            return;
+        if(count> 1):
+
+            if(path.isfile(f'./table/{table}.csv') != False):
+                with open(f'./table/{table}.csv', 'r', ) as f:
+                    datalist = list(csv.reader(f))
+                    mytable= np.array(datalist)
+                    row_mytable, c_mytable= mytable.shape;
+                    routermytable = mytable[0:row_mytable,1:2];
+                    if(columeconnect[0] != table):
+                        position_datarow = np.argwhere(routermytable== columeconnect[0]);
+                        if(len(position_datarow) == 0):
+                            return;
+                        mytable = np.delete(mytable,position_datarow[0][0], 0)
+                        mytable[:, 3] =  count;
+                        datanumpi =np.append(datalist, np.array(mytable),axis = 0);
+                        print(datanumpi);
+                        my_df = pd.DataFrame(datanumpi)
+                        my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                        # print(mytable[position_datarow[0][0]]);
+                        # print(datatable.split(','));
+                        # print(datatable.split(',')[0]);
+
+
         x = np.array(datatable)
         r, c= x.shape;
         datarouter = x[0:r,0:1];

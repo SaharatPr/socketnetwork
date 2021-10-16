@@ -15,7 +15,7 @@ def socketServer(router,host,port):
         print(f'Router {router} started ...');
         while 1:
             connectionSocket, addr = serverSocket.accept()
-            sentence = connectionSocket.recv(1024)
+            sentence = connectionSocket.recv(4096)
             getDataFromClient(sentence);
             connectionSocket.send(sentence)
     except NameError:
@@ -23,6 +23,7 @@ def socketServer(router,host,port):
 
 def getDataFromClient(data):
     try:
+        print(data);
         datajson = pickle.loads(data);
         updateTable(datajson)
     # modifiedSentence = pickle.loads(ast.literal_eval(data))
@@ -32,11 +33,10 @@ def getDataFromClient(data):
 
 def updateTable(data):
     try:
-        print(data["data"]);
+        print(data);
         if(len(data["data"]) == 0):
             return;
         table = sys.argv[1];
-        
         datatable = readTable(table);
         mytable= np.array(datatable)
         neartable = np.array(data["data"]);

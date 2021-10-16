@@ -4,6 +4,7 @@ from socketServer import *
 from socketClient import *
 from time import time, sleep
 import asyncio
+import os
 import threading
 from multiprocessing import Process, Pool
 async def main():
@@ -11,6 +12,9 @@ async def main():
         if(len(sys.argv) <= 1):
             print("Please enter paramitter ex. python3 routers [filename]");
             return;
+        if(path.isfile(f'./table/{sys.argv[1]}.csv') != False):
+            os.remove(f'./table/{sys.argv[1]}.csv')
+
         f = open(f"./profile/{sys.argv[1]}.txt", "r")
         line = f.readlines();
         host = line[1].split(',')[2].split(':')[0];
@@ -18,7 +22,7 @@ async def main():
         Process(target=socketServer,args=(sys.argv[1],host, port)).start();
         count = 1;
         while True:
-            await asyncio.sleep(10)
+            await asyncio.sleep(5)
             for x in range(1,len(line)):
                 socketClient(line[x],sys.argv[1],count)
             count =  count+1;
