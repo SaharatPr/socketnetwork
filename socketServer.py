@@ -33,7 +33,6 @@ def getDataFromClient(data):
 
 def updateTable(data):
     try:
-        
         if(len(data["data"]) == 0):
             return;
         table = sys.argv[1];
@@ -50,15 +49,16 @@ def updateTable(data):
         
         for i in subnetnearTable:
             if(len(np.argwhere(subnetmyTable== i)) == 0 ):
-               positionnear =  np.argwhere(neartable== i);
-               subnet = neartable[positionnear[0][0]][positionnear[0][1]];
-               fromrouter = neartable[positionnear[0][0]][1];
-               if(fromrouter == '-'):
+                positionnear =  np.argwhere(neartable== i);
+                subnet = neartable[positionnear[0][0]][positionnear[0][1]];
+                fromrouter = neartable[positionnear[0][0]][1];
+                if(fromrouter == '-'):
                    fromrouter = data["datafrom"]
-               datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1, int(data["count"])+1]]),axis = 0);
-               my_df = pd.DataFrame(datanumpi)
-               my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
-            print("-----------");
+                if(subnet == '-'):
+                   return
+                datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1, int(data["count"])+1]]),axis = 0);
+                my_df = pd.DataFrame(datanumpi)
+                my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
         return;
         # for i in subnetmyTable:
         #     for j in subnetnearTable:
