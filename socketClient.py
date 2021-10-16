@@ -7,6 +7,7 @@ import os.path
 from os import path
 import numpy as np
 import csv
+import sys
 import os
 def socketClient(data, table,count):
     datatable =  readTableOrCreateFile(data,table,count);
@@ -144,6 +145,24 @@ def WriteTable(datatable, columeconnect, table, cost, count):
 
 def readTable(table):
     try:
+        if(path.isfile(f'./table/{table}.csv') != False):  
+            f = open(f"./table/{table}.csv", "r", )
+            line = list(csv.reader(f))
+            return line;
+        f = open(f"./profile/{sys.argv[1]}.txt", "r")
+        line = f.readlines();
+     
+       
+        with open(f'./table/{table}.csv', 'w+', ) as f:
+            print("CCCCC");
+            datalist = list(csv.reader(f))
+            # print(line[1].split(',')[1]);
+            datalist_ = [[line[1].split(',')[1], "-", 1, 1]]
+            print("TYYY");
+            my_df = pd.DataFrame(datalist_)
+            my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+        print("AAA");
+     
         if(path.isfile(f'./table/{table}.csv') != False):  
             f = open(f"./table/{table}.csv", "r", )
             line = list(csv.reader(f))

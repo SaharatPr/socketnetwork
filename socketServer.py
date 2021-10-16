@@ -23,7 +23,7 @@ def socketServer(router,host,port):
 
 def getDataFromClient(data):
     try:
-        print(data);
+
         datajson = pickle.loads(data);
         updateTable(datajson)
     # modifiedSentence = pickle.loads(ast.literal_eval(data))
@@ -33,7 +33,7 @@ def getDataFromClient(data):
 
 def updateTable(data):
     try:
-        print(data);
+        
         if(len(data["data"]) == 0):
             return;
         table = sys.argv[1];
@@ -42,9 +42,12 @@ def updateTable(data):
         neartable = np.array(data["data"]);
         row_mytable, c_mytable= mytable.shape;
         row_neartable, c_neartable= neartable.shape;
+        
         subnetmyTable = mytable[0:row_mytable,0:1];
+        
         subnetnearTable = neartable[0:row_neartable,0:1];
         position_datarow = np.argwhere(mytable== data["datafrom"]);
+        
         for i in subnetnearTable:
             if(len(np.argwhere(subnetmyTable== i)) == 0 ):
                positionnear =  np.argwhere(neartable== i);

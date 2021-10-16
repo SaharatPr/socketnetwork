@@ -1,4 +1,4 @@
 A_TEXT
-A,192.168.1.0/24,localhost:10000
+A,192.168.1.0/24,localhost:10000,
 B,-,localhost:10001
 D,192.168.4.0/24,localhost:10004
