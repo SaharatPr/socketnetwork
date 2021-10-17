@@ -9,14 +9,13 @@ import numpy as np
 import csv
 import sys
 import os
-from processtable import *
-from socketServer import *
 def socketClient(data, table,count):
     datatable =  readTableOrCreateFile(data,table,count);
     try:    
         jsondatatbale = {
             "datafrom" : table,
             "data": datatable,
+            "count":count
         }
         if(data.split(",")[0] == table):
             return count;
@@ -30,14 +29,55 @@ def socketClient(data, table,count):
         if(modifiedSentence == None):
             return count;
 
-        # clientSocket.close()
-        # return count;
+        clientSocket.close()
+        return count;
     except ConnectionRefusedError:
-        # EditTableDisconnect(datatable,data, table, 9999, count);
+        EditTableDisconnect(datatable,data, table, 9999, count);
         return count;
         # print(f'Connot Connect {data.split(",")[1]}:{data.split(",")[2]}')      
 
 
+def readTableOrCreateFile(data,table, count):
+    try:
+
+        if(data.split(',')[1] != "-"):
+            if(path.isfile(f'./table/{table}.csv') != False):
+                with open(f'./table/{table}.csv', 'r', ) as f:
+                    datalist = list(csv.reader(f))
+                    if(len(datalist) == 0):
+                        datalist = [[data.split(',')[1], "-", 1, count]]
+                        my_df = pd.DataFrame(datalist)
+                        my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                    WriteTable(datalist, data, table, 1,count);
+
+            if(path.isfile(f'./table/{table}.csv') != True):
+                with open(f'./table/{table}.csv', 'w+', ) as f:
+                    datalist = list(csv.reader(f))
+                    if(len(datalist) == 0):
+                        datalist = [[data.split(',')[1], "-", 1, count]]
+                        my_df = pd.DataFrame(datalist)
+                        my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                    WriteTable(datalist, data, table, 1, count);   
+        if(path.isfile(f'./table/{table}.csv') != False):  
+            f = open(f"./table/{table}.csv", "r", )
+            line = list(csv.reader(f))
+            npline = np.array(line);
+            max = 0;
+            for j in npline:
+                if(max <= int(j[3])):
+                    max = int(j[3]);
+
+            newline=[];
+            count = 0;
+            for j in npline:
+                if(max < int(j[3])):
+                    line.pop(count)
+                    count = count+1
+            return line;
+        return []
+    except:
+        print(f"Error read table ")    
+        return [];  
 
 def WriteTable(datatable, columeconnect, table, cost, count):
     #datatable คือ table ใน router
@@ -64,8 +104,8 @@ def WriteTable(datatable, columeconnect, table, cost, count):
                         # print(datalist);
                         # uniques = np.unique(new_array)  
                         # print(uniques);
-                        print(mytable);
                         datanumpi =np.append(datalist, np.array(mytable),axis = 0);
+                        print(datanumpi);
                         my_df = pd.DataFrame(datanumpi)
                         my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
                         # print(mytable[position_datarow[0][0]]);

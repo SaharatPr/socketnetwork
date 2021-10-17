@@ -24,9 +24,7 @@ async def main():
         while True:
             await asyncio.sleep(2)
             for x in range(1,len(line)):
-                 socketClient(line[x],sys.argv[1],count);
-                 ();
-            readTableOnly(sys.argv[1],count);
+                socketClient(line[x],sys.argv[1],count)
             count =  count+1;
     except NameError:
         print(NameError)
