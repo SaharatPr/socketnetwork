@@ -1,4 +1,0 @@
-G_TEXT
-port:10007
-C,localhost,10002
-F,localhost,10006

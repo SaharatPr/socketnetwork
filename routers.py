@@ -22,7 +22,7 @@ async def main():
         Process(target=socketServer,args=(sys.argv[1],host, port)).start();
         count = 1;
         while True:
-            await asyncio.sleep(2)
+            await asyncio.sleep(10)
             for x in range(1,len(line)):
                 socketClient(line[x],sys.argv[1],count);
                  
