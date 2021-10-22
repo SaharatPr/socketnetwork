@@ -61,8 +61,6 @@ def updateTable(data):
         if(len(data["data"]) == 0):
             return;
         table = sys.argv[1];
-        
-        print("DataFROM : "+data["datafrom"]);
         datatable = readTableOrCreateFile(data,table, 1);
         mytable= np.array(datatable)
         neartable = np.array(data["data"]);
@@ -77,17 +75,56 @@ def updateTable(data):
                 positionnear =  np.argwhere(neartable== i);
                 subnet = neartable[positionnear[0][0]][positionnear[0][1]];
                 fromrouter = neartable[positionnear[0][0]][1];  
+                fromintable = fromrouter
                 if(fromrouter == '-'):
                    fromrouter = data["datafrom"]
                 else:
                    fromrouter = data["datafrom"]
                 if(subnet == '-'):
                    return
-                
-                datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1]]),axis = 0);
-                my_df = pd.DataFrame(datanumpi)
-                my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                for somedata in neartable:
+                    
+                    if(len(somedata) != 0):
+                        if(fromintable != table):
+                            datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1]]),axis = 0);
+                            my_df = pd.DataFrame(datanumpi)
+                            my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                # datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1]]),axis = 0);
+                # my_df = pd.DataFrame(datanumpi)
+                # my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
                 return;
+
+
+                # print(subnet);
+        
+        
+
+        rowdelete = [];
+        for datamytable_ in mytable:
+            if(datamytable_[1] == data["datafrom"]):
+                c = np.argwhere(neartable== datamytable_[0]);
+                if(len(c) == 0):
+                    rowdelete.append(datamytable_);
+
+        if(len(rowdelete) != 0):
+            for i in rowdelete:
+                c = np.argwhere(mytable== i[0]);
+                for row in c:
+                    if(mytable[row[0]][1] == data["datafrom"]):
+                        # print("===============");
+                        # print(mytable[row[0]])
+                        mytable = np.delete(mytable, row[0], 0)
+                        break;
+            my_df = pd.DataFrame(mytable)
+            my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                    # print(row[0]);
+        # for datamytable_ in mytable:
+        #     if(datamytable_[1] == data["datafrom"]):
+        #         for dataneartable_ in neartable:
+        #             if(datamytable_[0] == dataneartable_[0]):
+        #                 print(datamytable_[0]);
+                    
+                # print(datamytable_);
     except NameError:
         print(NameError);
         print(f"Error update table")
