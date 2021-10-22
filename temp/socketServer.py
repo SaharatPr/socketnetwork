@@ -13,8 +13,7 @@ def socketServer(router,host,port):
         serverSocket.bind(('',serverPort))
         serverSocket.listen(1000)
         print(f'Router {router} started ...');
-        print("XXXX");
-        CreateTableFirts(router);
+        # CreateTableFirts(router);
         while 1:
             connectionSocket, addr = serverSocket.accept()
             sentence = connectionSocket.recv(4096)
@@ -49,7 +48,7 @@ def updateTable(data):
         
         subnetnearTable = neartable[0:row_neartable,0:1];
         position_datarow = np.argwhere(mytable== data["datafrom"]);
-        
+        print("XXXXXX");
         for i in subnetnearTable:
             if(len(np.argwhere(subnetmyTable== i)) == 0 ):
                 positionnear =  np.argwhere(neartable== i);
@@ -96,11 +95,10 @@ def updateTable(data):
 
 
 def CreateTableFirts(table):
-    print(path.isfile(f'./table/{table}.csv'));
     if(path.isfile(f'./table/{table}.csv') != False):
         with open(f'./table/{table}.csv', 'w+', ) as f:
             datalist = list(csv.reader(f))
-            print(datalist);
+            # print(datalist);
             #     datalist = [[data.split(',')[1], "-", 1, count]]
             #     my_df = pd.DataFrame(datalist)
             #     my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 

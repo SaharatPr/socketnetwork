@@ -1,4 +1,4 @@
 F_TEXT
-port:10006
-E,localhost,10005
-G,localhost,10007
+F,192.168.5.0/24,localhost:10006,1
+C,-,localhost:10002,1
+E,-,localhost:10005,1

@@ -24,4 +24,3 @@ def socketServer(router,host,port):
             connectionSocket.close();
     except NameError:
         print(NameError)
-

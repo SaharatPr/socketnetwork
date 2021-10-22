@@ -28,7 +28,6 @@ def socketClient(data, table,count):
         modifiedSentence = clientSocket.recv(1024)
         if(modifiedSentence == None):
             return count;
-
         clientSocket.close()
         return count;
     except ConnectionRefusedError:

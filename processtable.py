@@ -61,6 +61,8 @@ def updateTable(data):
         if(len(data["data"]) == 0):
             return;
         table = sys.argv[1];
+        
+        print("DataFROM : "+data["datafrom"]);
         datatable = readTableOrCreateFile(data,table, 1);
         mytable= np.array(datatable)
         neartable = np.array(data["data"]);
@@ -77,9 +79,11 @@ def updateTable(data):
                 fromrouter = neartable[positionnear[0][0]][1];  
                 if(fromrouter == '-'):
                    fromrouter = data["datafrom"]
+                else:
+                   fromrouter = data["datafrom"]
                 if(subnet == '-'):
                    return
-               
+                
                 datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1]]),axis = 0);
                 my_df = pd.DataFrame(datanumpi)
                 my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
@@ -87,3 +91,51 @@ def updateTable(data):
     except NameError:
         print(NameError);
         print(f"Error update table")
+
+def EditTableDisconnect(datatable, columeconnect, table, cost, count):
+    #datatable คือ table ใน router
+    #columeconnect คือ colume ปัจจุบัน
+    #table คือชื่อ Routers หรือชื่อตาราง
+    try:
+        # if(len(datatable) == 0):
+        #     return;
+
+        # if(count> 1):
+           
+        if(path.isfile(f'./table/{table}.csv') != False):
+                with open(f'./table/{table}.csv', 'r', ) as f:
+                    datalist = list(csv.reader(f))
+                    mytable= np.array(datalist)
+                    row_mytable, c_mytable= mytable.shape;
+                    routermytable = mytable[0:row_mytable,1:2];
+                    if(columeconnect[0] != table):
+                        position_datarow = np.argwhere(routermytable== columeconnect[0]);
+                        if(len(position_datarow) == 0):
+                            return;
+                        for datadelete in position_datarow:
+                            mytable = np.delete(mytable,position_datarow[0][0], 0)
+                            # mytable[:, 3] =  count;
+                            # new_array = [tuple(row) for row in mytable]
+                            # uniques = np.unique(new_array,axis=0)
+                            # datanumpi =np.append(datalist, np.array(uniques),axis = 0);
+                        my_df = pd.DataFrame(mytable)
+                        my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                        # print(mytable[position_datarow[0][0]]);
+                        # print(datatable.split(','));
+                        # print(datatable.split(',')[0]);
+
+
+        # x = np.array(datatable)
+        # r, c= x.shape;
+        # datarouter = x[0:r,0:1];
+        # subnet = columeconnect.split(",")[1];
+        # position_datarow = np.argwhere(datarouter== subnet);
+        # if(len(position_datarow) == 0 and subnet != "-"):
+        #     datanumpi = np.append(x, np.array([[subnet,"-",cost, count]]),axis = 0);
+        #     my_df = pd.DataFrame(datanumpi)
+        #     my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+        
+
+    except NameError:
+        print(NameError);
+        print(f"Error update table ")    

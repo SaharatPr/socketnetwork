@@ -1,5 +1,4 @@
 C_TEXT
-port:10002
-B,localhost,10001
-E,localhost,10005
-G,localhost,10007
+C,192.168.3.0/24,localhost:10002,1
+B,192.168.2.0/24,localhost:10001,1
+F,-,localhost:10006,1

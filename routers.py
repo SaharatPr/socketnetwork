@@ -22,10 +22,11 @@ async def main():
         Process(target=socketServer,args=(sys.argv[1],host, port)).start();
         count = 1;
         while True:
-            await asyncio.sleep(2)
+            await asyncio.sleep(5)
             for x in range(1,len(line)):
-                 socketClient(line[x],sys.argv[1],count);
-                 ();
+                socketClient(line[x],sys.argv[1],count);
+                 
+            print('\n')
             readTableOnly(sys.argv[1],count);
             count =  count+1;
     except NameError:

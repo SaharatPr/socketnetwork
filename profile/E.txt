@@ -1,5 +1,4 @@
 E_TEXT
-port:10005
-D,localhost,10004
-C,localhost,10002
-F,localhost,10006
+C,192.168.6.0/24,localhost:10005,1
+F,-,localhost:10006,1
+D,-,localhost:10004,1
