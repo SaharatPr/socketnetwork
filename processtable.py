@@ -39,12 +39,11 @@ def readTableOnly(table, count):
     try:
         with open(f'./table/{table}.csv', 'r', ) as f:
             datalist = list(csv.reader(f))
-            # print(f"รอบที่ {count} ");
-            # print("Dest sunbet,        Next hop   Cost");
-            # print("---------------------------")
-            # for dattatable in datalist:
-            #     print("========");
-                # print(dattatable[0],"       ", dattatable[1],"       ", dattatable[2]);
+            print(f"รอบที่ {count} ");
+            print("Dest sunbet,        Next hop   Cost");
+            print("---------------------------")
+            for dattatable in datalist:
+                print(dattatable[0],"       ", dattatable[1],"       ", dattatable[2]);
     except:
         print(f"Error read table ")    
  
@@ -73,13 +72,15 @@ def updateTable(data):
         newarrat =  np.concatenate((mytable, neartable), axis=0)
         for i in subnetnearTable:
             if(len(np.argwhere(subnetmyTable== i) != 0)):
-                # print(i[0]);
                 validatecost = mytable[np.argwhere(subnetmyTable== i[0])[0][0]:np.argwhere(subnetmyTable== i[0])[0][0]+1,0:3]
                 constmytable = validatecost[0][2];
+                datarowchange = validatecost;
                 validatecost= neartable[np.argwhere(subnetnearTable== i[0])[0][0]:np.argwhere(subnetnearTable== i[0])[0][0]+1,0:3]
                 constneartable = validatecost[0][2];
-                print(validatecost[0][2]);
-                print("=====================");
+                if(int(constmytable) > int(constneartable)+1):
+                    mytable[np.argwhere(subnetmyTable== i[0])[0][0]] = [i[0],data["datafrom"], int(neartable[np.argwhere(subnetnearTable== i[0])[0][0]][2])+1];
+                    my_df = pd.DataFrame(mytable)
+                    my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
 
             if(len(np.argwhere(subnetmyTable== i)) == 0 ):
                 positionnear =  np.argwhere(neartable== i);

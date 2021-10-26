@@ -1,5 +1,4 @@
 D_TEXT
-D,-,localhost:10004,1
-A,192.168.4.0/24,localhost:10000,1
+D,192.168.4.0/24,localhost:10004,5
 E,-,localhost:10005,1
 B,-,localhost:10001,1
