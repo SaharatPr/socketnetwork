@@ -39,11 +39,12 @@ def readTableOnly(table, count):
     try:
         with open(f'./table/{table}.csv', 'r', ) as f:
             datalist = list(csv.reader(f))
-            print(f"รอบที่ {count} ");
-            print("Dest sunbet,        Next hop   Cost");
-            print("---------------------------")
-            for dattatable in datalist:
-                print(dattatable[0],"       ", dattatable[1],"       ", dattatable[2]);
+            # print(f"รอบที่ {count} ");
+            # print("Dest sunbet,        Next hop   Cost");
+            # print("---------------------------")
+            # for dattatable in datalist:
+            #     print("========");
+                # print(dattatable[0],"       ", dattatable[1],"       ", dattatable[2]);
     except:
         print(f"Error read table ")    
  
@@ -71,6 +72,15 @@ def updateTable(data):
         position_datarow = np.argwhere(mytable== data["datafrom"]);
         newarrat =  np.concatenate((mytable, neartable), axis=0)
         for i in subnetnearTable:
+            if(len(np.argwhere(subnetmyTable== i) != 0)):
+                # print(i[0]);
+                validatecost = mytable[np.argwhere(subnetmyTable== i[0])[0][0]:np.argwhere(subnetmyTable== i[0])[0][0]+1,0:3]
+                constmytable = validatecost[0][2];
+                validatecost= neartable[np.argwhere(subnetnearTable== i[0])[0][0]:np.argwhere(subnetnearTable== i[0])[0][0]+1,0:3]
+                constneartable = validatecost[0][2];
+                print(validatecost[0][2]);
+                print("=====================");
+
             if(len(np.argwhere(subnetmyTable== i)) == 0 ):
                 positionnear =  np.argwhere(neartable== i);
                 subnet = neartable[positionnear[0][0]][positionnear[0][1]];
@@ -83,7 +93,6 @@ def updateTable(data):
                 if(subnet == '-'):
                    return
                 for somedata in neartable:
-                    
                     if(len(somedata) != 0):
                         if(fromintable != table):
                             datanumpi= np.append(mytable, np.array([[subnet,fromrouter,int(neartable[positionnear[0][0]][2])+1]]),axis = 0);
@@ -111,8 +120,6 @@ def updateTable(data):
                 c = np.argwhere(mytable== i[0]);
                 for row in c:
                     if(mytable[row[0]][1] == data["datafrom"]):
-                        # print("===============");
-                        # print(mytable[row[0]])
                         mytable = np.delete(mytable, row[0], 0)
                         break;
             my_df = pd.DataFrame(mytable)
