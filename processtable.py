@@ -53,7 +53,6 @@ def getDataFromClient(data):
     try:
 
         datajson = pickle.loads(data);
-        # print(datajson);
         if(datajson["type"] == "message"):
             data = readdatatable('./table/'+sys.argv[1]+'.csv')
             processClinetSendmessage(datajson,data,sys.argv[1]);

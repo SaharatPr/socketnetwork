@@ -66,19 +66,25 @@ def clientSendmessag(ipconnect, router, destination ):
 
 
 def processClinetSendmessage(message,data, router):
-    print(message["destination"]);
-    for dataintable in data:
-        if(dataintable[0] == message["destination"] and dataintable[0] == '-'):
-            print("Message arrived");
-            return;
-        elif (dataintable[0] == message["destination"]):
-            print("send message to next router");
-            ipconnect = dataintable;
-    newdatatableprofile = readdatatable('./profile/'+router+'.txt');
-    print(ipconnect);
-    print(newdatatableprofile);
-    for x in newdatatableprofile:
-        if(x[0] == ipconnect[1]):
-            print(x);
+    try:
+        print(message["destination"]);
+        for dataintable in data:
+            if(dataintable[0] == message["destination"] and dataintable[1] == '-'):
+                print("Message arrived");
+                return;
+            elif (dataintable[0] == message["destination"]):
+                print("Send message to next router");
+                ipconnect = dataintable;
+        newdatatableprofile = readdatatable('./profile/'+router+'.txt');
+
+        for x in newdatatableprofile:
+            if(x[0] == ipconnect[1]):
+                ipconnect = x[2]
+                break;
+
+        clientSendmessag(ipconnect, router, message["destination"]);
+    except NameError:
+        print(NameError);
+        print(f"Error get table")
 if __name__ == '__main__':
     sendMessage();
