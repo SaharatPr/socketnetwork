@@ -41,7 +41,7 @@ def readTableOnly(table, count):
     try:
         with open(f'./table/{table}.csv', 'r', ) as f:
             datalist = list(csv.reader(f))
-            print(f"รอบที่ {count} ");
+            # print(f"รอบที่ {count} ");
             print("Dest sunbet,        Next hop   Cost");
             print("---------------------------")
             for dattatable in datalist:
