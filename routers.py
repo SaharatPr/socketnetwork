@@ -1,5 +1,6 @@
  # Module sys has to be imported:
 import sys
+from sendmessage import sendMessage
 from socketServer import * 
 from socketClient import *
 from time import time, sleep

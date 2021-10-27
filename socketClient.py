@@ -18,6 +18,7 @@ def socketClient(data, table,count):
         jsondatatbale = {
             "datafrom" : sys.argv[1],
             "data": datatable,
+            "type":None
         }
         if(data.split(",")[0] == table):
             return count;

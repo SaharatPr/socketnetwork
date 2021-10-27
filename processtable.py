@@ -4,6 +4,8 @@ import pickle
 import sys
 import numpy as np
 import pandas as pd
+
+from sendmessage import processClinetSendmessage, readdatatable
 # เราเตอร์เริ่มทำงาน สร้างtable
 def CreateTableFirts(table):
     try:
@@ -51,7 +53,12 @@ def getDataFromClient(data):
     try:
 
         datajson = pickle.loads(data);
-        updateTable(datajson)
+        # print(datajson);
+        if(datajson["type"] == "message"):
+            data = readdatatable('./table/'+sys.argv[1]+'.csv')
+            processClinetSendmessage(datajson,data,sys.argv[1]);
+        else:
+            updateTable(datajson)
     except NameError:
         print(NameError);
         print(f"Error get table")
@@ -74,7 +81,7 @@ def updateTable(data):
             if(len(np.argwhere(subnetmyTable== i) != 0)):
                 validatecost = mytable[np.argwhere(subnetmyTable== i[0])[0][0]:np.argwhere(subnetmyTable== i[0])[0][0]+1,0:3]
                 constmytable = validatecost[0][2];
-                datarowchange = validatecost;
+                # datarowchange = validatecost;
                 validatecost= neartable[np.argwhere(subnetnearTable== i[0])[0][0]:np.argwhere(subnetnearTable== i[0])[0][0]+1,0:3]
                 constneartable = validatecost[0][2];
                 if(int(constmytable) > int(constneartable)+1):
