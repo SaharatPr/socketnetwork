@@ -61,8 +61,7 @@ def clientSendmessag(ipconnect, router, destination ):
         clientSocket.send(databyte)
         modifiedSentence = clientSocket.recv(1024)
     except:
-        print("AAAA");
-    print(ipconnect)
+        print("Clinet Error Send Message");
 
 
 def processClinetSendmessage(message,data, router):
