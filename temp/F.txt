@@ -1,4 +1,4 @@
 F_TEXT
-F,192.168.6.0/24,localhost:10006,1
+F,192.168.5.0/24,localhost:10006,1
 C,-,localhost:10002,1
 E,-,localhost:10005,1

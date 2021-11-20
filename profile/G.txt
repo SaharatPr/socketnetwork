@@ -1,0 +1,4 @@
+G_TEXT
+G,192.168.7.0/24,localhost:10008,1
+A,-,localhost:10000,1
+C,-,localhost:10002,1

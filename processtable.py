@@ -80,13 +80,13 @@ def updateTable(data):
             if(len(np.argwhere(subnetmyTable== i) != 0)):
                 validatecost = mytable[np.argwhere(subnetmyTable== i[0])[0][0]:np.argwhere(subnetmyTable== i[0])[0][0]+1,0:3]
                 constmytable = validatecost[0][2];
-                # datarowchange = validatecost;
                 validatecost= neartable[np.argwhere(subnetnearTable== i[0])[0][0]:np.argwhere(subnetnearTable== i[0])[0][0]+1,0:3]
                 constneartable = validatecost[0][2];
                 if(int(constmytable) > int(constneartable)+1):
-                    mytable[np.argwhere(subnetmyTable== i[0])[0][0]] = [i[0],data["datafrom"], int(neartable[np.argwhere(subnetnearTable== i[0])[0][0]][2])+1];
-                    my_df = pd.DataFrame(mytable)
-                    my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
+                    if(int(constneartable)+1 <= 15):
+                        mytable[np.argwhere(subnetmyTable== i[0])[0][0]] = [i[0],data["datafrom"], int(neartable[np.argwhere(subnetnearTable== i[0])[0][0]][2])+1];
+                        my_df = pd.DataFrame(mytable)
+                        my_df.to_csv(f'./table/{table}.csv', index=False,header=False) 
 
             if(len(np.argwhere(subnetmyTable== i)) == 0 ):
                 positionnear =  np.argwhere(neartable== i);
@@ -140,7 +140,6 @@ def updateTable(data):
                     
                 # print(datamytable_);
     except NameError:
-        print(NameError);
         print(f"Error update table")
 
 def EditTableDisconnect(datatable, columeconnect, table, cost, count):

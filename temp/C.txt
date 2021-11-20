@@ -1,5 +1,5 @@
 C_TEXT
 C,192.168.3.0/24,localhost:10002,1
+C,192.168.2.0/24,localhost:10002,1
 B,-,localhost:10001,1
 F,-,localhost:10006,1
-G,-,localhost:10008,1
